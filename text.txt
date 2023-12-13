@@ -1,0 +1,26 @@
+Start
+
+1-Language Selection:
+Choose your native language.
+Choose the language you want to learn.
+
+2-Word Selection and Translation:
+Select random words.
+send the wrods selected to the api to translate.
+store the translated words.
+
+3-Shuffle and Display:
+Shuffle the words.
+Display the shuffled words and their translations.
+
+4-Matching:
+User clicks on two words to match.
+If correct, highlight in green
+If incorrect, highlight in red.
+
+5-Round Completion:
+Inform the user when all words are matched.
+Display a score.
+
+Next Round:
+Repeat from step 2.
