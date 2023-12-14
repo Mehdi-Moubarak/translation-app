@@ -1,47 +1,51 @@
-const words = ['hello', 'name', 'accept', 'car', 'day'];
-const translatedWords = ['salut', 'nom', 'accepter', 'voiture', 'jour'];
+const dectionary = {
+    hello: 'salut',
+    name: 'nom',
+    accept: 'accepter',
+    car: 'voiture',
+    day: 'jour',
+};
 
-let initialIndexesColumn1 = [];
-let initialIndexesColumn2 = [];
 
-renderWords();
-renderTranslatedWords();
-GameManager();
-for (let i = 0; i < words.length; i++) {
-    initialIndexesColumn1.push(i);
+let words = [];
+let translatedWords = [];
+
+
+// store keys in words and store values  translatedWords;
+for (let key in dectionary) {
+    words.push(key);
+    let value = dectionary[key];
+    translatedWords.push(value);
 }
-
-for (let i = 0; i < translatedWords.length; i++) {
-    initialIndexesColumn2.push(i);
-}
-
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
-
-    initialIndexesColumn1 = words.map((word, index) => index);
-    initialIndexesColumn2 = translatedWords.map((word, index) => index);
-
+    return array;
 }
 
-function renderWords() {
-    const innerContainer = document.querySelector('.innerContainer');
-    const wordsList = document.createElement('div');
-    wordsList.className = "column-1";
 
-    shuffleArray(words);
+
+
+
+words = shuffleArray(words);
+translatedWords = shuffleArray(translatedWords);
+renderWords();
+renderTranslatedWords();
+GameManager();
+
+function renderWords() {
+    const column1 = document.querySelector('.column-1');
+    const innerContainer = document.querySelector('.innerContainer');
 
     words.forEach((word) => {
         const wordElement = createWordElement(word);
-        // wordElement.addEventListener('click', handleWordClick);
-
-        wordsList.appendChild(wordElement);
+        column1.appendChild(wordElement);
     });
 
-    innerContainer.appendChild(wordsList);
+    innerContainer.appendChild(column1);
 }
 
 function renderTranslatedWords() {
@@ -49,12 +53,8 @@ function renderTranslatedWords() {
     const translatedWordsList = document.createElement('div');
     translatedWordsList.className = "column-2";
 
-    shuffleArray(translatedWords);
-
     translatedWords.forEach((word) => {
         const wordElement = createWordElement(word);
-        // wordElement.addEventListener('click', handleWordClick2);
-
         translatedWordsList.appendChild(wordElement);
     });
 
@@ -104,8 +104,8 @@ function GameManager() {
     const wordsColumn1 = document.querySelectorAll('.column-1 .word');
     const wordsColumn2 = document.querySelectorAll('.column-2 .word');
 
-    let clickedWordColumn1;
-    let clickedWordColumn2;
+    // let clickedWordColumn1;
+    // let clickedWordColumn2;
 
 
     wordsColumn1.forEach(word => {
@@ -118,42 +118,71 @@ function GameManager() {
     wordsColumn2.forEach(word => {
         word.addEventListener('click', function (e) {
             clickedWordColumn2 = handleWordClick2(e);
-            compareWords();
+            compareWords(clickedWordColumn1.textContent, clickedWordColumn2.textContent);
+            styleWords();
         });
     });
 
-    
-    function compareWords() {
-        const score = document.querySelector('.score');
-        // Check if both words are selected
-        if (clickedWordColumn1 && clickedWordColumn2) {
-            // Get the index of the selected words in the arrays
-            const indexColumn1 = words.indexOf(clickedWordColumn1.textContent);
-            const indexColumn2 = translatedWords.indexOf(clickedWordColumn2.textContent);
-            
-            // Check if the words match based on their index in the arrays
-            if (indexColumn1 !== -1 && indexColumn2 !== -1 && indexColumn1 === indexColumn2) {
-                // If they match, add the wordStyle-2 class
-                clickedWordColumn1.classList.add('wordStyle-2');
-                clickedWordColumn2.classList.add('wordStyle-2');
-            } else {
-                // If they don't match, add the wordStyle-3 class temporarily
-                clickedWordColumn1.classList.add('wordStyle-3');
-                clickedWordColumn2.classList.add('wordStyle-3');
-                score.textContent -= 1;
-                // Use requestAnimationFrame to wait for the next frame
-                requestAnimationFrame(() => {
-                    // After the next frame, remove the wordStyle-3 class
-                    setTimeout(() => {
-                        clickedWordColumn1.classList.remove('wordStyle-3');
-                        clickedWordColumn2.classList.remove('wordStyle-3');
-                    }, 500);
-                });
-            }
 
-            // Reset clicked words for the next selection
-            clickedWordColumn1 = null;
-            clickedWordColumn2 = null;
+    // function compareWords() {
+    //     const score = document.querySelector('.score');
+    //     // Check if both words are selected
+    //     if (clickedWordColumn1 && clickedWordColumn2) {
+    //         // Get the index of the selected words in the arrays
+    //         const indexColumn1 = words.indexOf(clickedWordColumn1.textContent);
+    //         const indexColumn2 = translatedWords.indexOf(clickedWordColumn2.textContent);
+
+    //         // Check if the words match based on their index in the arrays
+    //         if (indexColumn1 !== -1 && indexColumn2 !== -1 && indexColumn1 === indexColumn2) {
+    //             // If they match, add the wordStyle-2 class
+    //             clickedWordColumn1.classList.add('wordStyle-2');
+    //             clickedWordColumn2.classList.add('wordStyle-2');
+    //         } else {
+    //             // If they don't match, add the wordStyle-3 class temporarily
+    //             clickedWordColumn1.classList.add('wordStyle-3');
+    //             clickedWordColumn2.classList.add('wordStyle-3');
+    //             score.textContent -= 1;
+    //             // Use requestAnimationFrame to wait for the next frame
+    //             requestAnimationFrame(() => {
+    //                 // After the next frame, remove the wordStyle-3 class
+    //                 setTimeout(() => {
+    //                     clickedWordColumn1.classList.remove('wordStyle-3');
+    //                     clickedWordColumn2.classList.remove('wordStyle-3');
+    //                 }, 500);
+    //             });
+    //         }
+
+    //         // Reset clicked words for the next selection
+    //         clickedWordColumn1 = null;
+    //         clickedWordColumn2 = null;
+    //     }
+    // }
+    function compareWords(englishWord, frenchWord) {
+        //look up the english word in the dictionary. and find the corret french word for it.
+        const frenchWordFromDictionary = dectionary[englishWord];
+        return frenchWordFromDictionary === frenchWord;
+    }
+
+    function styleWords() {
+        debugger
+        if (compareWords(clickedWordColumn1.textContent, clickedWordColumn2.textContent)) {
+            clickedWordColumn1.classList.add('wordStyle-2');
+            clickedWordColumn2.classList.add('wordStyle-2');
+        } else {
+            // If they don't match, add the wordStyle-3 class temporarily
+            clickedWordColumn1.classList.add('wordStyle-3');
+            clickedWordColumn2.classList.add('wordStyle-3');
+            requestAnimationFrame(() => {
+                // After the next frame, remove the wordStyle-3 class
+                setTimeout(() => {
+                    clickedWordColumn1.classList.remove('wordStyle-3');
+                    clickedWordColumn2.classList.remove('wordStyle-3');
+                    clickedWordColumn1.classList.remove('wordStyle');
+                    clickedWordColumn2.classList.remove('wordStyle');
+                }, 1000);
+            });
         }
-    }   
+    }
+
 }
+
