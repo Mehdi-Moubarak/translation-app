@@ -8,19 +8,6 @@ body{
     margin-right: auto;
 }
 
-.selection{
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    
-}
-select{
-    width: 80px;
-    height: 35px;
-    border-radius: 9px;
-    margin-top: 18px;
-}
-
 .barHolder{
     background-color: #e5e5e5;
     width: 100%;
@@ -99,8 +86,15 @@ img{
 }
 
 .wordStyle-2{
-    color: hsla(120, 70%, 51%, 0.671);
+    color: hsla(120, 72%, 23%, 0.671);
     background-color: hsla(120, 70%, 51%, 0.671);
     box-shadow: 1px 4px hsla(120, 70%, 51%, 0.671);
     border-color: hsla(120, 70%, 51%, 0.671);
+}
+
+.wordStyle-3{
+    color: #ea2b2b;
+    background-color: #ffdfe0;
+    box-shadow: 1px 4px #ffdfe0;
+    border-color: #ff4b4b;
 }
